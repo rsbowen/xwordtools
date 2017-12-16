@@ -5,8 +5,9 @@
 # * The .ans.txt file
 #
 # Then produce a file which are the clues you want, one clue per line, in the
-# same order as the .ans.txt file. Probably you can do this by editing the
-# .ans.txt file with your favorite text editor.
+# same order as the .ans.txt file (all across clues, in order, followed by all
+# down clues, in order). Probably you can do this by editing the .ans.txt file
+# with your favorite text editor.
 
 import argparse
 import sys
@@ -48,6 +49,7 @@ if __name__ == "__main__":
   parser.add_argument('--cluesfile', metavar='c', type=str, help="Path to the clues file")
   parser.add_argument('--author', metavar='a', type=str, help="Author")
   parser.add_argument('--title', metavar='t', type=str, help="Title")
+  parser.add_argument('--copyright', metavar='t', type=str, help="Title")
 
   ns = parser.parse_args()
 
@@ -63,5 +65,10 @@ if __name__ == "__main__":
 
   puzzle.author = ns.author
   puzzle.title = ns.title
+  # Another tool, decode_crossword.perl, explicitly looks for the copyright symbol 0xA9. So, include it.
+  puzzle.copyright = u'' + unichr(0xA9) + (ns.copyright if ns.copyright else "")
+  puzzle.notes = ""
+
+  print puzzle.__dict__
 
   puzzle.save(ns.puzfile)
